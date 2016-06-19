@@ -1,16 +1,8 @@
-
 <?php
-
-function viewlisttable() {
-$db = mysql_connect("localhost","Parser","parser") or die(mysql_error()); /*Подключение к серверу */
-$result = mysql_list_tables('Parser'); 
- while ($row = mysql_fetch_row($result)) 
-     {  echo $row[0]."<br>";}
-}
-function createtabble ($mainw) {
-$db = mysql_connect("localhost","Parser","parser") or die(mysql_error()); /*Подключение к серверу */
+function createtabble ($mainwd) {
+include 'config.php';/*Подключение к серверу */
 mysql_select_db("Parser",$db); /*Подключение к базе данных на сервере*/	
-$strSQL = "CREATE TABLE $mainw (
+$strSQL = "CREATE TABLE $mainwd (
 KeyWord CHAR(25) NULL, 
 Year CHAR(25) NULL, 
 Result CHAR(25) NULL )";
@@ -20,10 +12,44 @@ mysql_query($strSQL) or die(mysql_error());
 
 function addtodb ( $mainw, $valkw, $valyear, $valresult ) 
 {
-$db = mysql_connect("localhost","Parser","parser") or die(mysql_error()); /*Подключение к серверу */
+include 'config.php'; /*Подключение к серверу */
 mysql_select_db("Parser",$db); /*Подключение к базе данных на сервере*/
-$strSQL = "INSERT INTO $mainw (KeyWord, Year, Result) VALUES ('$valkw','$valyear','$valresult')";
+$mainwd = $mainw.(date("dmy"));
+$strSQL = "INSERT INTO $mainwd (KeyWord, Year, Result) VALUES ('$valkw','$valyear','$valresult')";
 mysql_query($strSQL) or die(mysql_error());
 	mysql_close ();
+}
+
+function tabbleview($tabblename)
+{
+include 'config.php';
+  mysql_select_db("Parser") or die (mysql_error());//выбор базы данных
+  mysql_query('SET character_set_database = utf8'); 
+  mysql_query ("SET NAMES 'utf8'");
+ // error_reporting(E_ALL); 
+ // ini_set("display_errors", 1);*/
+  $select_qry = "SELECT * FROM $tabblename";
+  $select_result = mysql_query($select_qry);
+  $select_amt = mysql_num_rows($select_result); // Теперь знаем количество записей.
+echo '
+<TABLE border="1">';
+echo '
+<TR>
+<TH>Ключевое слово</TH>
+<TH>Год</TH>
+<TH>Результат</TH>
+</TR>';
+for($i=0; $i<$select_amt; $i++)
+{
+$row = mysql_fetch_assoc($select_result);
+echo '
+<TR>
+<TD>'.$row['KeyWord'].'</TD>
+<TD>'.$row['Year'].'</TD>
+<TD>'.$row['Result'].'</TD>
+</TR>';
+}
+echo '
+</TABLE>';
 }
 ?>

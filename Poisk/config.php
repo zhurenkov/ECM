@@ -1,4 +1,4 @@
 <?php 
-phpinfo();
-#$db = new PDO(’mysql:host=localhost;dbname=mydb’,$dbuser,$dbpass);
+//phpinfo();
+$db = mysql_connect("localhost","Parser","parser") or die(mysql_error());
 ?>

@@ -19,10 +19,9 @@ $urltip = "tbm=nws"; //указываем что поиск в новостях
 $el=0;
 
 $arrayKW = array($_REQUEST['kw1'],$_REQUEST['kw2'],$_REQUEST['kw3'],$_REQUEST['kw4'],$_REQUEST['kw5'],$_REQUEST['kw6'],$_REQUEST['kw7'],$_REQUEST['kw8'],$_REQUEST['kw9'],$_REQUEST['kw10'],$_REQUEST['kw11'],$_REQUEST['kw12'],$_REQUEST['kw13'],$_REQUEST['kw14']);
-//echo $mw.'<br>';
 $mwtrnsl = translit($mw);
-//echo translit($mw);
-$crttabble = createtabble ($mwtrnsl);
+$mainwd = $mwtrnsl.(date("dmy"));
+$crttabble = createtabble ($mainwd);
 while($arrayKW[$el] != null) {
 $year=$year1;	
 while($year<=$year2) {
@@ -41,18 +40,16 @@ else
 	{
 		
 	$page = $result['content']; //задаем переменной $page контент со страницы
-	//echo $page;
 	$String = $page;
 	$page = Cut($String, '<div id="resultStats">', '<nobr>'); //вырезаем часть с количеством результатов
 	$rest = preg_replace("/[^0-9]/", '', $page); //оставляем только цифры
-	echo 'Результат запроса по связке: '.$mw.' + '.$arrayKW[$el].' за: '.$year.' год:'.$rest.'<br>';
 	$addbd = addtodb($mwtrnsl, $arrayKW[$el], $year, $rest);
 	$year = $year + 1;
-	//
-}
-}
+}}
 $el++;
 }
+
+echo tabbleview($mainwd);
 
 ?>
 </body>
